@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.mapper.VipMapper">
+
+    <!--    条件查询订单信息-->
+    <select id="selectVipInfoByCondition" resultType="Map" parameterType="String">
+        SELECT vip_num, vip_name, gender, idcard, phone, create_date, vip_rate FROM vip WHERE not_del = '1'
+        <if test="arg0==1">
+            AND vip_num = #{arg1}
+        </if>
+        <if test="arg0==2">
+            AND vip_name = #{arg1}
+        </if>
+        <if test="arg0==3">
+            AND phone = #{arg1}
+        </if>
+        <if test="arg0==4">
+            AND idcard = #{arg1}
+        </if>
+    </select>
+
+    <!--	批量删除-->
+    <update id="batDelVipInfo" parameterType="String">
+        UPDATE vip SET not_del = '0' WHERE vip_num IN(
+        <foreach collection="numsAttr.split(',')" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+    </update>
+
+</mapper>

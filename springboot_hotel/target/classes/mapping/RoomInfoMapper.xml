@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.mapper.RoomInfoMapper">
+
+    <!--    条件查询订单信息-->
+    <select id="selectRoomInfoByCondition" resultType="Map" parameterType="String">
+        SELECT
+        rm.room_num,
+        rt.room_type_name,
+        rt.room_price,
+        rm.room_status
+        FROM
+        rooms rm
+        INNER JOIN
+        room_type rt
+        ON rm.room_type_id = rt.id
+        WHERE not_del = '1'
+        <if test="arg0==1">
+            AND rm.room_type_id = #{arg1}
+        </if>
+        <if test="arg0==2">
+            AND rm.room_status = #{arg1}
+        </if>
+    </select>
+
+    <!--    &lt;!&ndash;	批量删除&ndash;&gt;
+        <update id="batdel" parameterType="String">
+            UPDATE orders SET not_del = '0' WHERE order_num IN(
+            <foreach collection="numAttr.split(',')" item="item" index="index" separator=",">
+                #{item}
+            </foreach>
+            )
+        </update>-->
+
+</mapper>

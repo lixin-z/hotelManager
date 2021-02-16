@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.mapper.OrderMapper">
+
+    <!--    条件查询订单信息-->
+    <select id="selectOrderInfoByCondition" resultType="Map" parameterType="String">
+        SELECT
+        o.order_num,
+        rm.room_num,
+        iri.customer_name,
+        o.consumeName,
+        o.consumeCount,
+        o.order_money,
+        o.order_status,
+        o.create_date
+        FROM
+        orders o
+        INNER JOIN rooms rm ON rm.id = o.room_id
+        INNER JOIN in_room_info iri ON rm.id = iri.room_id
+        AND iri.STATUS = 1
+        <if test="arg0==1">
+            WHERE o.order_num = #{arg1}
+        </if>
+        <if test="arg0==2">
+            WHERE iri.customer_name = #{arg1}
+        </if>
+        <if test="arg0==3">
+            WHERE rm.room_num = #{arg1}
+        </if>
+        <if test="arg0==4">
+            WHERE o.order_status = '1'
+        </if>
+        <if test="arg0==5">
+            WHERE o.order_status = '0'
+        </if>
+    </select>
+
+    <!--	批量删除-->
+    <update id="batdel" parameterType="String">
+        UPDATE orders SET not_del = '0' WHERE order_num IN(
+        <foreach collection="numAttr.split(',')" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+    </update>
+
+</mapper>
