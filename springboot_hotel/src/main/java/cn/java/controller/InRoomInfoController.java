@@ -232,6 +232,7 @@ public class InRoomInfoController {
      */
     @RequestMapping("/getConsumeInfoByRoomId.do")
     public String getConsumeInfoByRoomId(HttpSession session, Long roomId, Model model) {
+        System.out.println("你好");
         List<Map<String, Object>> occupyRooms = inRoomInfoService.getOccupyRooms();
         model.addAttribute("occupyRooms", occupyRooms);
         List<Map<String, Object>> consumeInfo = inRoomInfoService.getConsumeInfo(roomId);

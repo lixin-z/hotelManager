@@ -15,7 +15,7 @@ public interface VipMapper {
      *
      * @return
      */
-    @Select("SELECT vip_num, vip_name, gender, idcard, phone, vip_rate, create_date FROM vip WHERE not_del = '1'")
+    @Select("SELECT vip_num, vip_name, gender, idcard, phone, vip_rate, create_date, content FROM vip WHERE not_del = '1'")
     List<Map<String, Object>> selectVipInfo(Integer pageNum, Integer pageSize);
 
     /**
@@ -43,7 +43,7 @@ public interface VipMapper {
      * @param vipInfo
      * @return
      */
-    @Insert("INSERT INTO vip VALUES(NULL, #{vipNum}, #{vipName}, #{vipRate}, #{idcard}, #{phone}, #{createDate}, #{gender}, '1')")
+    @Insert("INSERT INTO vip VALUES(NULL, #{vipNum}, #{vipName}, #{vipRate}, #{idcard}, #{phone}, #{createDate}, #{gender}, '1', #{content})")
     boolean addVipInfo(VipInfo vipInfo);
 
     @Select("SELECT vip_name FROM vip WHERE not_del = '1'")
@@ -55,7 +55,7 @@ public interface VipMapper {
     @Select("SELECT rate FROM vip_rates")
     List<Map<String, Object>> selectAllRate();
 
-    @Update("UPDATE vip SET vip_name = #{vipName}, vip_rate = #{vipRate}, idcard = #{idcard}, phone = #{phone}, gender = #{gender} WHERE vip_num = #{vipNum}")
+    @Update("UPDATE vip SET vip_name = #{vipName}, vip_rate = #{vipRate}, idcard = #{idcard}, phone = #{phone}, gender = #{gender}, content = #{content} WHERE vip_num = #{vipNum}")
     boolean uodateVipInfo(VipInfo vipInfo);
 
     @Select("SELECT * FROM vip WHERE vip_num = #{arg0}")

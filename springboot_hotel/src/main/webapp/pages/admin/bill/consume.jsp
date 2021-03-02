@@ -13,6 +13,8 @@
     <!-- 引入bootstrap分页 -->
     <link rel="stylesheet" href="<%=basePath%>/static/js/bootstrap/bootstrap.css"/>
     <script src="<%=basePath%>/static/js/bootstrap/jquery.min.js"></script>
+    <!--  select提交表单  -->
+    <script src="<%=basePath%>/static/js/submit.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $(".click").click(function () {
@@ -46,8 +48,8 @@
     <div class="tools">
         <div class="toolbar">
             <label style="color: #5bc0de; font-size: 16px">房间号</label>
-            <form action="/getConsumeInfoByRoomId.do" method="post">
-                <select class="select1" name="roomId">
+            <form action="/getConsumeInfoByRoomId.do" method="post" id="roomNumForm">
+                <select onchange="submitForm();" class="select1" name="roomId"  >
                     <option value="0">请选择</option>
                     <c:forEach items="${occupyRooms }" var="map">
                         <option value="${map.id }">
@@ -55,10 +57,8 @@
                         </option>
                     </c:forEach>
                 </select>
-                <button><input type="submit" value="搜索"></button>
             </form>
         </div>
-
     </div>
     <table class="tablelist">
         <thead>

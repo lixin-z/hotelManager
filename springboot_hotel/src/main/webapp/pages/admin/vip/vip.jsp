@@ -107,6 +107,7 @@
             <th>手机号码</th>
             <th>享受折扣</th>
             <th>创建日期</th>
+            <th>描述</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -135,6 +136,12 @@
                     <td>${vip.vip_rate }折</td>
                 </c:if>
                 <td>${vip.create_date }</td>
+                <c:if test="${vip.content == null}">
+                    <td>无</td>
+                </c:if>
+                <c:if test="${vip.content != null}">
+                    <td><a name="seeContent" substance="${vip.content }" onclick="javaScripts:void(0)">查看</a></td>
+                </c:if>
                 <td>
                     <a name="changeSimpleVipInfo" vipNum="${vip.vip_num }" vipName="${vip.vip_name}" href="javascript:void(0)" class="tablelink">修改</a>
                     <a num="${vip.vip_num }" name="delBtn" href="javascript:void(0)" class="tablelink"> 删除</a>
@@ -242,6 +249,13 @@
             }
         });
     });
+
+    // 查看描述
+    $("[name=seeContent]").click(function (){
+        var subStance = $(this).attr("subStance");
+        alert(subStance);
+    });
 </script>
+
 </body>
 </html>

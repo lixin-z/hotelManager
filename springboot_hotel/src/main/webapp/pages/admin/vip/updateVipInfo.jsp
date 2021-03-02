@@ -20,8 +20,7 @@
             src="<%=basePath%>/static/js/jquery.idTabs.min.js"></script>
     <script type="text/javascript"
             src="<%=basePath%>/static/js/select-ui.min.js"></script>
-    <script type="text/javascript"
-            src="<%=basePath%>/static/js/editor/kindeditor.js"></script>
+    <script type="text/javascript" src="<%=basePath %>/static/editor/kindeditor.js"></script>
 
     <script type="text/javascript">
         KE.show({
@@ -243,8 +242,6 @@
                             <span style="color: red;font-size: 12px">${sessionScope.errorMap.idcard==null?'':sessionScope.errorMap.idcard}</span>
                         </div>
                     </li>
-
-
                     <li>
                         <div>
                             <label>手机号码<b>*</b></label>
@@ -265,6 +262,10 @@
                             <span style="color: red;font-size: 12px">${sessionScope.errorMap.phone==null?'':sessionScope.errorMap.phone}</span>
                         </div>
 
+                    </li>
+                    <li><label>备注消息</label>
+                        <textarea id="content7" name="content"
+                                  style="width:700px;height:250px;visibility:hidden;"></textarea>
                     </li>
                     <li><label>&nbsp;</label><input type="submit"
                                                     class="btn" value="确认"/></li>

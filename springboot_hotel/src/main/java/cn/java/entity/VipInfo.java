@@ -21,6 +21,8 @@ public class VipInfo {
     @Pattern(regexp = "1[25789]\\d{9}", message = "*手机号格式错误")
     private String phone;
 
+    private String content;
+
     private String createDate;
 
     private String vipNum;
@@ -83,6 +85,14 @@ public class VipInfo {
         this.vipRate = vipRate;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     @Override
     public String toString() {
         return "VipInfo{" +
@@ -90,6 +100,7 @@ public class VipInfo {
                 ", gender='" + gender + '\'' +
                 ", idcard='" + idcard + '\'' +
                 ", phone='" + phone + '\'' +
+                ", content='" + content + '\'' +
                 ", createDate='" + createDate + '\'' +
                 ", vipNum='" + vipNum + '\'' +
                 ", vipRate=" + vipRate +

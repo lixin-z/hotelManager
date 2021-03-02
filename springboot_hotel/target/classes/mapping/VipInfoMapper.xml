@@ -6,7 +6,7 @@
 
     <!--    条件查询订单信息-->
     <select id="selectVipInfoByCondition" resultType="Map" parameterType="String">
-        SELECT vip_num, vip_name, gender, idcard, phone, create_date, vip_rate FROM vip WHERE not_del = '1'
+        SELECT vip_num, vip_name, gender, idcard, phone, create_date, vip_rate, content FROM vip WHERE not_del = '1'
         <if test="arg0==1">
             AND vip_num = #{arg1}
         </if>

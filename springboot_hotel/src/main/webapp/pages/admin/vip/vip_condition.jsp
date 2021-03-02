@@ -10,8 +10,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>无标题文档</title>
     <link href="<%=basePath %>/static/css/style.css" rel="stylesheet" type="text/css"/>
+    <!-- 引入bootstrap分页 -->
     <link rel="stylesheet" href="<%=basePath%>/static/js/bootstrap/bootstrap.css"/>
     <script src="<%=basePath%>/static/js/bootstrap/jquery.min.js"></script>
+    <script src="<%=basePath%>/static/js/bootstrap/bootstrap.min.js"></script>
+    <script src="<%=basePath%>/static/js/bootstrap/bootstrap-paginator.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $(".click").click(function () {
@@ -52,7 +55,7 @@
                     <tr>
                         <td class="zi"><span>选择分类：</span></td>
                         <td><select name="type">
-                            <option value="0">----</option>
+                            <option value="0">请选择</option>
                             <option value="1">会员卡号</option>
                             <option value="2">会员姓名</option>
                             <option value="3">手机号码</option>
@@ -78,31 +81,45 @@
             <th>手机号码</th>
             <th>享受折扣</th>
             <th>创建日期</th>
+            <th>描述</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${requestScope.vipInfoList}" var="vip" varStatus="num">
+        <c:forEach items="${requestScope.vipInfoList }" var="vip" varStatus="num">
             <tr>
                 <td><input name="ck" type="checkbox" value="${vip.vip_num }"/></td>
                 <td>${num.count }</td>
                 <td>${vip.vip_num }</td>
                 <td>${vip.vip_name }</td>
-                <td>${vip.gender }</td>
+                <td>
+                    <c:if test="${vip.gender=='1'}">
+                        男
+                    </c:if>
+                    <c:if test="${vip.gender=='0'}">
+                        女
+                    </c:if>
+                </td>
                 <td>${vip.idcard }</td>
                 <td>${vip.phone }</td>
-<%--                享受的折扣--%>
-                <td>
+                    <%--                享受的折扣--%>
                 <c:if test="${vip.vip_rate == null }">
-                    不打
+                    <td>不打折</td>
                 </c:if>
-                <c:if test="${vip.vip_rate == null }">
-                    ${vip.vip_rate }
+                <c:if test="${vip.vip_rate != null }">
+                    <td>${vip.vip_rate }折</td>
                 </c:if>
-                    折
-                </td>
                 <td>${vip.create_date }</td>
-                <td><a num="${vip.vip_num }" name="delBtn" href="javascript:void(0)" class="tablelink"> 删除</a></td>
+                <c:if test="${vip.content == null}">
+                    <td>无</td>
+                </c:if>
+                <c:if test="${vip.content != null}">
+                    <td><a name="seeContent" substance="${vip.content }" onclick="javaScripts:void(0)">查看</a></td>
+                </c:if>
+                <td>
+                    <a name="changeSimpleVipInfo" vipNum="${vip.vip_num }" vipName="${vip.vip_name}" href="javascript:void(0)" class="tablelink">修改</a>
+                    <a num="${vip.vip_num }" name="delBtn" href="javascript:void(0)" class="tablelink"> 删除</a>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
@@ -121,23 +138,22 @@
         </div>
     </div>
 </div>
-
 <script type="text/javascript">
     $('.tablelist tbody tr:odd').addClass('odd');
     // 删除会员
-    $("[name='delBtn']").click(function (){
+    $("[name='delBtn']").click(function () {
         var flag = window.confirm("您确认删除该会员记录吗？");
-        if(flag){
+        if (flag) {
             var vip_num = $(this).attr("num");
             $.ajax({
-                url:"/delVip.do",
-                type:"POST",
-                data:{vipNum:vip_num},
-                success:function (result){
-                    if(result){
+                url: "/delVip.do",
+                type: "POST",
+                data: {vipNum: vip_num},
+                success: function (result) {
+                    if (result) {
                         alert("删除成功！");
                         window.location.reload();
-                    }else {
+                    } else {
                         alert("删除失败，请重新再试一次！");
                     }
                 }
@@ -146,45 +162,72 @@
     });
 
     // 全选复选框
-    $("#selectAll").change(function (){
+    $("#selectAll").change(function () {
         var flag = $(this).prop("checked");
-        if(flag){
+        if (flag) {
             $("input[name='ck']").prop("checked", true);
-        }else {
+        } else {
             $("input[name='ck']").prop("checked", false);
         }
     });
 
     // 批量删除
-    $("#batdel").click(function (){
+    $("#batdel").click(function () {
         var $chChecked = $("input[name='ck']:checked");
         // 先判断有没有被勾选
         var len = $chChecked.size();
-        if(len >= 1){
+        if (len >= 1) {
             var nums = "";
-            $chChecked.each(function (index, dom){
-                var  num = $(dom).val();
+            $chChecked.each(function (index, dom) {
+                var num = $(dom).val();
                 nums += num + ",";
             });
             // 将多个num传递到后台
             $.ajax({
                 url: "<%=basePath %>/batDelVipInfo.do",
                 type: "POST",
-                dataType:"JSON",
-                data:{numsAttr:nums},
-                success:function (result){
-                    if(result){
+                dataType: "JSON",
+                data: {numsAttr: nums},
+                success: function (result) {
+                    if (result) {
                         alert("批量删除成功！");
                         window.location.reload();
-                    }else {
+                    } else {
                         alert("批量删除失败！");
                     }
                 }
             })
-        }else {
+        } else {
             alert("请先勾选要删除的会员记录");
         }
     });
+
+    // 修改单个VIP信息
+    $("[name='changeSimpleVipInfo']").click(function (){
+        var num = $(this).attr("vipNum");
+        var name = $(this).attr("vipName");
+        $.ajax({
+            url:"<%=basePath %>/changeSingleVipInfo.do",
+            type:"POST",
+            dataType:"JSON",
+            data:{vipNum:num, vipName:name},
+            success:function (result){
+                if(result){
+                    <%--alert("${pageContext.request.contextPath}");--%>
+                    window.location.href = "<%=basePath %>/pages/admin/vip/updateVipInfo.jsp";
+                }else {
+                    window.alert("跳转失败，请稍后再试！")
+                }
+            }
+        });
+    });
+
+    // 查看描述
+    $("[name=seeContent]").click(function (){
+        var subStance = $(this).attr("subStance");
+        alert(subStance);
+    });
 </script>
+
 </body>
 </html>

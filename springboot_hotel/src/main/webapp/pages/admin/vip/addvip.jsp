@@ -155,12 +155,10 @@
                     </li>
 
 
-                    <%-- <li><label>备注消息</label>
-
-
+                     <li><label>备注消息</label>
                          <textarea id="content7" name="content"
                                    style="width:700px;height:250px;visibility:hidden;"></textarea>
-                     </li>--%>
+                     </li>
                     <li><label>&nbsp;</label><input name="" type="submit" class="btn" value="确认"/></li>
                 </ul>
             </form>
